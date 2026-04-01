@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		const token = getToken();
 		if (!token) {
 			setBootstrap({ phase: "done", user: null });
-			router.replace("/login");
+			router.replace("/signup");
 			return;
 		}
 		try {
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				clearToken();
 			}
 			setBootstrap({ phase: "done", user: null });
-			router.replace("/login");
+			router.replace("/signup");
 		}
 	}, [router]);
 
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		const token = getToken();
 		if (!token) {
-			router.replace("/login");
+			router.replace("/signup");
 			setBootstrap({ phase: "done", user: null });
 			return;
 		}
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				if (e instanceof AuthApiError && e.status === 401) {
 					clearToken();
 				}
-				router.replace("/login");
+				router.replace("/signup");
 				setBootstrap({ phase: "done", user: null });
 			});
 

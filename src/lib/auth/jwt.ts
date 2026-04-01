@@ -1,6 +1,6 @@
 import * as jose from "jose";
 import { ACCESS_TOKEN_EXPIRES_SEC } from "@/lib/auth-contract";
-import { getAuthJwtSecret } from "@/lib/auth/worker-env";
+import { getAuthJwtSecret, type WorkerEnv } from "@/lib/auth/worker-env";
 
 /** Phase C — HS256, `sub` / `iat` / `exp`; secret from Worker env only at call sites that have validated `env`. */
 export async function signAccessToken(
@@ -40,7 +40,7 @@ export async function verifyAccessToken(
  */
 export async function verifyAccessTokenFromEnv(
 	token: string,
-	env: Cloudflare.Env,
+	env: WorkerEnv,
 ): Promise<jose.JWTPayload & { sub: string }> {
 	const secret = getAuthJwtSecret(env);
 	if (typeof secret !== "string" || secret.length === 0) {

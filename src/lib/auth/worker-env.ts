@@ -1,7 +1,9 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
+export type WorkerEnv = ReturnType<typeof getCloudflareContext>["env"];
+
 /** D1 binding, JWT secret, and other Worker env — prefer over `process.env` alone in API routes. */
-export function getWorkerEnv(): Cloudflare.Env {
+export function getWorkerEnv(): WorkerEnv {
 	const { env } = getCloudflareContext();
 	return env;
 }
@@ -10,7 +12,7 @@ export function getWorkerEnv(): Cloudflare.Env {
  * HS256 signing/verify secret: prefer Worker `env` (Wrangler / `.dev.vars`), then `process.env`
  * so local Next (e.g. `.env.local`) and Cloudflare stay aligned.
  */
-export function getAuthJwtSecret(env: Cloudflare.Env): string | undefined {
+export function getAuthJwtSecret(env: WorkerEnv): string | undefined {
 	const fromWorker = env.AUTH_JWT_SECRET;
 	if (typeof fromWorker === "string" && fromWorker.length > 0) {
 		return fromWorker;
