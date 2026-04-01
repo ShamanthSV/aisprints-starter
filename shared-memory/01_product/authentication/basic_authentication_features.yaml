@@ -1,5 +1,7 @@
 version: "0.1.0"
 
+# Sprint 1 normative API/JWT/env: docs/sprint-1/prd-auth-contract-env.mdc
+
 signup:
   - name: "user registration form"
     type: "ui feature"

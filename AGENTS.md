@@ -88,6 +88,45 @@ quizmaker-app/
 - **Cloudflare Types**: Generated in `cloudflare-env.d.ts`
 - **Update Command**: `wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts`
 
+## Coding standards & AI rules
+
+These rules apply to Next.js (App Router), Cloudflare D1, Vercel AI SDK, and Workers deployment. Full detail also lives in **`.cursorrules`** at the repo root.
+
+### Cloudflare D1 & SQLite
+
+| Topic | Rule |
+|--------|------|
+| **Booleans** | SQLite has no native boolean. On `INSERT`/`UPDATE`, store JS booleans as integers (`1` = true, `0` = false). On read, normalize with **`toBool()`** so `0`/`1` and string forms like `"true"`/`"false"` behave correctly. |
+| **SQL parameters** | Use **positional** placeholders (`?1`, `?2`, …). Do **not** use `$1`, `$2`. Route queries through **`lib/d1-client.ts`** (`executeQuery`, `executeQueryFirst`, `executeMutation`, etc.). |
+| **Mutations** | For complex mutations with bindings, avoid **`db.batch()`**; use individual **`executeMutation`** calls (e.g. in a loop) so parameter binding stays reliable. |
+
+### Environment variable access
+
+- **Dual lookup:** In API routes and server components, do not rely on **`process.env` alone**. Prefer **`const { env } = getCloudflareContext()`** for D1 bindings and Worker-exposed configuration so local dev and production align.
+- **OpenAI:** Always resolve the API key with **`getOpenAIKey()`** for compatibility with `.dev.vars` and the Worker runtime.
+
+### Structured AI integration (Vercel AI SDK)
+
+- Use **`generateObject`** with **`gpt-4o-mini`** for standards-aligned structured output unless a PRD says otherwise.
+- **Zod:** Validate AI responses against **`lib/mcq-generation-schema.ts`** (exactly four choices, required shape). **Reject** or re-prompt failed validation; do not persist invalid structures.
+
+### Security & authentication
+
+- **Ownership:** **`PUT`**/**`DELETE`** (and equivalent server actions) must confirm **`created_by`** matches the session **`userId`** before changes or deletes.
+- **Routes:** New pages must follow **`middleware.ts`** session and access rules (matchers, auth).
+
+### Documentation sync (`shared-memory/`)
+
+- After shipping a feature, update **Status** in the matching **`shared-memory/`** files (paired **`.md`** and **`.yaml`** for that feature).
+- When editing PRDs, cite code as **`filepath:line-number`**.
+- Before new behavior, read relevant **`shared-memory/`** PRDs and **`cloudflare-env.d.ts`** so bindings and behavior stay aligned with existing work.
+
+### Why this matters
+
+- Reduces D1 errors via integer booleans, **`toBool()`** on read, and positional parameters.
+- Improves production readiness by using Cloudflare context for env and secrets.
+- Keeps PRDs accurate with documentation-first updates and **`cloudflare-env.d.ts`** alignment.
+
 ## Available Scripts
 
 - `npm run dev` - Start development server with Turbopack

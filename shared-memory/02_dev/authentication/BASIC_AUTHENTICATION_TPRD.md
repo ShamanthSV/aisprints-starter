@@ -1,5 +1,7 @@
 # Basic Authentication System - Technical PRD
 
+> **Sprint 1 normative REST paths and JSON:** [`docs/sprint-1/prd-auth-contract-env.mdc`](../../../docs/sprint-1/prd-auth-contract-env.mdc). Use **`POST /api/auth/signup`**, **`POST /api/auth/login`**, **`GET /api/me`** (handler: `src/app/api/me/route.ts` — **not** `/api/auth/me`), **`POST /api/auth/logout`**.
+
 ## Overview
 
 This document outlines the requirements for implementing a basic authentication system for QuizMaker. The system will provide user registration, login, and session management to support MCQ creation and management functionality.
@@ -316,7 +318,7 @@ CREATE INDEX idx_users_created_at ON users (created_at);
 - ✅ `app/api/auth/signup/route.ts` with full validation and error handling
 - ✅ `app/api/auth/login/route.ts` with credential verification
 - ✅ `app/api/auth/logout/route.ts` for session cleanup
-- ✅ `app/api/auth/me/route.ts` for current user info
+- ✅ `src/app/api/me/route.ts` for **GET `/api/me`** (current user info)
 - ✅ `middleware.ts` with route protection logic
 - ✅ All endpoints tested and working with proper error handling
 
@@ -422,7 +424,7 @@ CREATE INDEX idx_users_created_at ON users (created_at);
 - **`app/api/auth/signup/route.ts`**: User registration endpoint
 - **`app/api/auth/login/route.ts`**: User login endpoint
 - **`app/api/auth/logout/route.ts`**: Session cleanup endpoint
-- **`app/api/auth/me/route.ts`**: Current user information endpoint
+- **`src/app/api/me/route.ts`**: Current user information (**GET `/api/me`**)
 
 #### Frontend Layer
 

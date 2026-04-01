@@ -41,6 +41,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Environment variables (Sprint 1 auth)
+
+Normative contract (paths, JSON, status codes, JWT): [`docs/sprint-1/prd-auth-contract-env.mdc`](docs/sprint-1/prd-auth-contract-env.mdc).
+
+| Variable | Role |
+|----------|------|
+| `AUTH_JWT_SECRET` | Required for HS256 JWT sign/verify. Never commit real values. |
+| `NEXTJS_ENV` | Optional; matches Cloudflare/local tooling. |
+| D1 binding `quizmaker_app_database` | Declared in `wrangler.jsonc`, not as a plain env string. |
+
+Copy [`.env.example`](.env.example) to `.env.local` if you use Next env files for documentation; for **OpenNext + Wrangler** local dev, put secrets in **`.dev.vars`** (see [`.dev.vars.example`](.dev.vars.example)). Regenerate bindings in `cloudflare-env.d.ts` after Wrangler changes with `npm run cf-typegen`.
+
+**Canonical auth HTTP paths:** `POST /api/auth/signup`, `POST /api/auth/login`, `GET /api/me`, `POST /api/auth/logout` — not `/api/auth/register` or `GET /api/auth/me`.
+
+Shared TypeScript + Zod for §2–§3: [`src/lib/auth-contract.ts`](src/lib/auth-contract.ts).
+
 ## Preview
 
 Preview the application locally on the Cloudflare runtime:
