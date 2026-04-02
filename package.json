@@ -4,8 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
-		"build": "opennextjs-cloudflare build",
-		"build:next": "next build",
+		"build": "next build",
+		"build:cf": "opennextjs-cloudflare build",
 		"start": "next start",
 		"lint": "next lint",
 		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
@@ -39,6 +39,9 @@
 		"react-hook-form": "^7.55.0",
 		"tailwind-merge": "^2.6.0",
 		"zod": "^3.24.2"
+	},
+	"overrides": {
+		"cloudflare": "^5.2.0"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250321.0",
